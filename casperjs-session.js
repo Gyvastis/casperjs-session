@@ -6,23 +6,20 @@ var fs = require('fs');
 var cookie_file = 'cookies.txt';
 
 exports.sessionInit = function(file){
-  if(typeof file == "undefined"){
-    file = cookie_file;
-  }
-  else{
+  if(typeof file !== "undefined"){
     cookie_file = file;
   }
 
   if ( ! fs.exists(cookie_file)) {
-    fs.write(file, '', 'w');
+    fs.write(cookie_file, '', 'w');
   }
 
-  var cookies = exports.sessionLoad();
+  var cookies = sessionLoad();
 
   return cookies.length > 0;
 };
 
-exports.sessionLoad = function() {
+var sessionLoad = function() {
   var cookies = [];
   var data;
 
@@ -60,4 +57,8 @@ exports.sessionSave = function() {
   });
 
   return fs.write(cookie_file, file_content, 'w');
+};
+
+exports.sessionDestroy = function(){
+  fs.write(cookie_file, '', 'w');
 };
