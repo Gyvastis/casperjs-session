@@ -51,11 +51,9 @@ exports.sessionLoad = function() {
   return cookies;
 };
 
-// exports.saveCookies = function(casper, file) {
 exports.sessionSave = function() {
   var file_content = '';
 
-  // casper.page.cookies.forEach(function(cookie) {
   phantom.cookies.forEach(function(cookie) {
     // return file_content += utils.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\r\n", cookie.domain, 'TRUE', cookie.path, 'FALSE', cookie.expiry, cookie.name, cookie.value);
     return file_content += utils.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\r\n", cookie.domain, 'TRUE', cookie.path, 'FALSE', (new Date()).getTime() + 3600 * 24 * 30, cookie.name, cookie.value);
