@@ -5,51 +5,61 @@ var fs = require('fs');
 
 var cookie_file = 'cookies.txt';
 
-exports.loadCookies = function(file = '') {
+exports.sessionInit = function(file){
+  if(typeof file == "undefined"){
+    file = cookie_file;
+  }
+  else{
+    cookie_file = file;
+  }
+
+  if ( ! fs.exists(cookie_file)) {
+    fs.write(file, '', 'w');
+  }
+
+  var cookies = exports.sessionLoad();
+
+  return cookies.length > 0;
+};
+
+exports.sessionLoad = function() {
   var cookies = [];
   var data;
 
-  if(file == ''){
-    file = cookie_file;
+  data = fs.read(cookie_file).trim();
+  if (data.length <= 0) {
+    return false;
   }
 
-  if (fs.exists(file)) {
-    data = fs.read(file).trim();
-    if (data.length <= 0) {
-      return false;
-    }
+  cookies = fs.read(cookie_file).split("\r\n");
+  cookies.forEach(function(cookie) {
+    var detail = cookie.split("\t");
 
-    cookies = fs.read(file).split("\r\n");
-    cookies.forEach(function(cookie) {
-      var detail = cookie.split("\t");
-      var newCookie = {
-        'name': detail[5],
-        'value': detail[6],
-        'domain': detail[0],
-        'path': detail[2],
-        'httponly': false,
-        'secure': false,
-        'expires': (new Date()).getTime() + 3600 * 24 * 30
-      };
-      return phantom.addCookie(newCookie);
-    });
-  } else {
-    console.log("Unable to load cookies from '" + file + "'. File doesn't exist", "warning");
-  }
+    var newCookie = {
+      'name': detail[5],
+      'value': detail[6],
+      'domain': detail[0],
+      'path': detail[2],
+      'httponly': false,
+      'secure': false,
+      'expires': (new Date()).getTime() + 3600 * 24 * 30
+    };
+
+    return phantom.addCookie(newCookie);
+  });
 
   return cookies;
 };
 
-// // exports.saveCookies = function(casper, file) {
-// exports.saveCookies = function(file = '') {
-//   var file_content = '';
-//
-//   if(file == ''){
-//     file = cookie_file;
-//   }
-//   // casper.page.cookies.forEach(function(cookie) {
-//   phantom.cookies.forEach(function(cookie) {
-//     return file_content += utils.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\r\n", cookie.domain, 'TRUE', cookie.path, 'FALSE', cookie.expiry, cookie.name, cookie.value);
-//   });
-//   return fs.write(file, file_content, 'w');
-// };
+// exports.saveCookies = function(casper, file) {
+exports.sessionSave = function() {
+  var file_content = '';
+
+  // casper.page.cookies.forEach(function(cookie) {
+  phantom.cookies.forEach(function(cookie) {
+    // return file_content += utils.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\r\n", cookie.domain, 'TRUE', cookie.path, 'FALSE', cookie.expiry, cookie.name, cookie.value);
+    return file_content += utils.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\r\n", cookie.domain, 'TRUE', cookie.path, 'FALSE', (new Date()).getTime() + 3600 * 24 * 30, cookie.name, cookie.value);
+  });
+
+  return fs.write(cookie_file, file_content, 'w');
+};
