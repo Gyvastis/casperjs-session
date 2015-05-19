@@ -1,6 +1,6 @@
 # CasperJS Session
 
-##A simple implementation of what should have been an essential feature for CasperJS.
+###A simple implementation of what should have been an essential feature for CasperJS.
 
 I have struggled to find an attractive solution for CasperJS session handling. Thus I have assembled together something rather simple but effective.
 
@@ -20,4 +20,9 @@ if( ! logged_in){
 else{
   // already logged_in
 }
+```
+
+To destroy session simply do this:
+```javascript
+session.sessionDestroy();
 ```
