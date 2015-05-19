@@ -26,3 +26,9 @@ To destroy session simply do this:
 ```javascript
 session.sessionDestroy();
 ```
+
+Something worth noting:
+* By default session is stored to `cookies.txt` file. You can pass a different file name to `sessionInit` function
+* `sessionInit` loads session from default cookie file. It creates the file if one does not exist
+* `sessionSave` rewrites previously saved session
+* `sessionDestroy` simply empties default session cookie file.
