@@ -1,10 +1,10 @@
 # CasperJS Session
 
-###A simple implementation of what should have been an essential feature for CasperJS.
+###A simple implementation of what should have been an essential feature of CasperJS.
 
 I have struggled to find an attractive solution of CasperJS session handling. Thus I have assembled together something rather simple but effective.
 
-Firstly, you have to define CasperJS Session requirement. CasperJS Session file can be placed in the same folder your script is called from.
+Firstly, you have to define CasperJS Session requirement. `casperjs-session.js` can be placed in the same folder your script is called from.
 ```javascript
 var session = require('casperjs-session');
 ```
@@ -28,8 +28,7 @@ session.sessionDestroy();
 ```
 
 Something worth noting:
-* By default session is stored in `cookies.txt` file. You can pass a different file name to `sessionInit` function
-* `sessionInit` loads session from default cookie file. It returns `true` if any cookies were loaded.
-* `sessionInit` calls `sessionLoad`, which gathers session from the cookie file. Every time session is loaded cookie expiration date is renewed.
-* `sessionSave` rewrites previously saved session
+* `sessionInit` loads session from `cookies.txt` (you can define a different filename by passing it to `sessionInit` function). It returns `true` if any cookies were loaded (it doesn't check expiration dates).
+* `sessionInit` calls `sessionLoad` which gathers cookies from the default cookie file. Every time cookies are loaded their expiration date is renewed.
+* `sessionSave` rewrites previously saved session.
 * `sessionDestroy` simply empties default session cookie file.
