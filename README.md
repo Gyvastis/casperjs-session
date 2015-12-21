@@ -1,6 +1,6 @@
 # CasperJS Session
 
-###A simple implementation of what should have been an essential feature of CasperJS.
+###A simple implementation of what should have been an essential feature of CasperJS
 
 I have struggled to find an attractive solution of CasperJS session handling. Thus I have assembled together something rather simple but effective.
 
